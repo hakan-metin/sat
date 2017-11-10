@@ -1,9 +1,14 @@
 
+THIRD_PARTY = third_party/
+
+GTEST_DIR = $(THIRD_PARTY)gtest/googletest/build/
+GLOG_DIR  = $(THIRD_PARTY)glog/build/
+
+exec  := sat_runner
+
 sources := $(wildcard $(SRC)core/*.cc)
 headers_dir = include/
 headers := $(wildcard $(headers_dir)dsb/*.h)
-
-$(info $(sources))
 
 objects         := $(patsubst %.cc, $(OBJ)%.o, $(sources))
 release_objects := $(patsubst %.cc, $(OBJ)release/%.o, $(sources))
@@ -12,9 +17,8 @@ debug_objects   := $(patsubst %.cc, $(OBJ)debug/%.o, $(sources))
 tests := $(wildcard tests/units/*.test.cc)
 tests_objects := $(patsubst %.cc, $(OBJ)%.o, $(tests))
 tests_objects += $(objects)
-tests_objects := $(filter-out %sat_solver.o, $(tests_objects))
+tests_objects := $(filter-out %$(exec).o, $(tests_objects))
 
-exec  := sat_solver
 
 $(call REQUIRE-DIR, $(objects))
 $(call REQUIRE-DIR, $(BIN)$(exec))
@@ -35,7 +39,7 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
 
-CFLAGS += -I$(SRC) -I./third_party/glog/build/
+CFLAGS += -I$(SRC) -I$(GLOG_DIR)
 
 default: CFLAGS += -O3 -fPIC -Wall -Wextra
 default: $(BIN)$(exec)
@@ -43,19 +47,23 @@ default: $(BIN)$(exec)
 release: CFLAGS += -O3 -fPIC -Wall -Wextra -D NDEBUG
 release: $(BIN)$(exec)_release
 
-debug: CFLAGS += -O0 -fPIC -Wall -Wextra -g
+debug: CFLAGS += -O0 -fPIC -Wall -Wextra -g  -D DEBUG
 debug: $(BIN)$(exec)_debug
+
+
+glog: $(GLOG_DIR)libglog.a
+gtest: $(GTEST_DIR)libgtest.a
+
+.PHONY: glog gtest
 
 
 ################################################################################
 # TESTS
 
-LIB_DIR = third_party/googletest/googletest/build/
+CFLAGS_TEST = $(CFLAGS) -I third_party/gtest/googletest/include/
+LDFLAGS_TEST = $(LDFLAGS) -L $(GTEST_DIR) -lgtest -lgtest_main -lpthread
 
-CFLAGS_TEST = $(CFLAGS) -I third_party/googletest/googletest/include/
-LDFLAGS_TEST = $(LDFLAGS) -L $(LIB_DIR) -lgtest -lgtest_main -lpthread
-
-test: third_party $(BIN)test
+test: gtest $(BIN)test
 run-test: test
 	./$(BIN)test
 run-test-valgrind: test
@@ -63,17 +71,18 @@ run-test-valgrind: test
 run-test-gdb: test
 	gdb --args ./$(BIN)test
 
+################################################################################
+
 
 check-style: $(sources) $(headers)
 	python ./scripts/cpplint.py $^
 
 # Special build
-third_party: $(LIB_DIR)libgtest.a
-	$(call cmd-call, scripts/build_googletest.sh)
-.PHONY: third_party
+$(GTEST_DIR)libgtest.a:
+	$(call cmd-call, scripts/build_gtest.sh)
 
-$(LIB_DIR)libgtest.a:
-	./scripts/build_googletest.sh
+$(GLOG_DIR)libglog.a:
+	$(call cmd-call, scripts/build_glog.sh)
 
 
 # Generic rules
