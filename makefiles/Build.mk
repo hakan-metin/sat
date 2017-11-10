@@ -35,7 +35,7 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
 
-CFLAGS += -I$(SRC)
+CFLAGS += -I$(SRC) -I./third_party/glog/build/
 
 default: CFLAGS += -O3 -fPIC -Wall -Wextra
 default: $(BIN)$(exec)
@@ -43,7 +43,7 @@ default: $(BIN)$(exec)
 release: CFLAGS += -O3 -fPIC -Wall -Wextra -D NDEBUG
 release: $(BIN)$(exec)_release
 
-debug: CFLAGS += -O0 -fPIC -Wall -Wextra -g 
+debug: CFLAGS += -O0 -fPIC -Wall -Wextra -g
 debug: $(BIN)$(exec)_debug
 
 
