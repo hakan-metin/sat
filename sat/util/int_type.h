@@ -149,7 +149,7 @@
 #include <iosfwd>
 #include <ostream>  // NOLINT
 
-#include "ortools/base/macros.h"
+#include "util/macros.h"
 
 template <typename IntTypeName, typename _ValueType>
 class IntType;
