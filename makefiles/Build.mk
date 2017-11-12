@@ -15,10 +15,9 @@ release_objects := $(patsubst %.cc, $(OBJ)release/%.o, $(sources))
 debug_objects   := $(patsubst %.cc, $(OBJ)debug/%.o, $(sources))
 
 tests := $(wildcard tests/units/*.test.cc)
-tests_objects := $(patsubst %.cc, $(OBJ)%.o, $(tests))
-tests_objects += $(objects)
+tests_objects += $(patsubst %.cc, $(OBJ)%.o, $(tests))
+tests_objects += $(patsubst %.cc, $(OBJ)tests/%.o, $(sources))
 tests_objects := $(filter-out %$(exec).o, $(tests_objects))
-
 
 $(call REQUIRE-DIR, $(objects))
 $(call REQUIRE-DIR, $(BIN)$(exec))
@@ -30,9 +29,10 @@ $(call REQUIRE-DIR, $(debug_objects))
 $(call REQUIRE-DIR, $(BIN)$(exec)_debug)
 
 $(call REQUIRE-DIR, $(tests_objects))
-$(call REQUIRE-DIR,  $(BIN)test)
+$(call REQUIRE-DIR, $(BIN)test)
 
 $(call REQUIRE-DEP, $(sources))
+$(call REQUIRE-DEP, $(tests))
 
 $(BIN)$(exec): $(objects)
 $(BIN)$(exec)_release: $(release_objects)
@@ -62,15 +62,18 @@ gtest: $(GTEST_DIR)libgtest.a
 # TESTS
 
 CFLAGS_TEST = $(CFLAGS) -I third_party/gtest/googletest/include/
-LDFLAGS_TEST = $(LDFLAGS) -L $(GTEST_DIR) -lgtest -lgtest_main -lpthread
+LDFLAGS_TEST = $(LDFLAGS) -L $(GTEST_DIR) -lgtest -lgtest_main -lpthread -lgcov
 
+test: CFLAGS += -O0 --coverage -fprofile-arcs -ftest-coverage -fPIC
 test: gtest $(BIN)test
 run-test: test
 	./$(BIN)test
 run-test-valgrind: test
-	valgrind --leak-check=full ./$(BIN)test
+	$(call cmd-valgrind, ./$(BIN)test)
 run-test-gdb: test
-	gdb --args ./$(BIN)test
+	$(call cmd-gdb, ./$(BIN)test)
+run-test-coverage: run-test
+	$(call cmd-gcovr, $(OBJ)tests/$(SRC))
 
 ################################################################################
 
@@ -98,7 +101,11 @@ $(BIN)$(exec)_debug: $(debug_objects)
 	$(call cmd-ld, $@, $^)
 
 $(BIN)test: $(tests_objects)
+	echo $(tests_objects)
 	$(call cmd-ld, $@, $^, $(LDFLAGS_TEST))
+
+$(OBJ)tests/%.o: %.cc
+	$(call cmd-cxx, $@, $<, $(CFLAGS_TEST))
 
 $(OBJ)release/%.o: %.cc
 	$(call cmd-cxx, $@, $<, $(CFLAGS))
