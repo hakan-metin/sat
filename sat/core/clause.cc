@@ -16,7 +16,7 @@ Clause* Clause::create(const std::vector<Literal>& literals,
         clause->_literals[i] = literals[i];
     }
 
-    clause->$_is_redundant = is_redundant;
+    clause->_is_redundant = is_redundant;
 
     return clause;
 }
