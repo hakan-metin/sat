@@ -40,6 +40,7 @@ $(BIN)$(exec)_debug: $(debug_objects)
 
 
 CFLAGS += -I$(SRC) -I$(GLOG_DIR)
+LDFLAGS += -lglog
 
 default: CFLAGS += -O3 -fPIC -Wall -Wextra
 default: $(BIN)$(exec)
