@@ -11,14 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SAT_CORE_LITERAL_H_
-#define SAT_CORE_LITERAL_H_
+#ifndef INCLUDE_SAT_CORE_LITERAL_H_
+#define INCLUDE_SAT_CORE_LITERAL_H_
 
 #include <string>
 
 #include "util/logging.h"
 #include "util/int_type.h"
 
+namespace sat {
 namespace core {
 
 // Index of a variable (>= 0).
@@ -89,5 +90,5 @@ class Literal {
 };
 
 }  // namespace core
-
-#endif  // SAT_CORE_LITERAL_H_
+}  // namespace sat
+#endif  // INCLUDE_SAT_CORE_LITERAL_H_
