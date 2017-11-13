@@ -12,8 +12,8 @@
 // limitations under the License.
 
 
-#ifndef SAT_CORE_CNFREADER_H_
-#define SAT_CORE_CNFREADER_H_
+#ifndef INCLUDE_SAT_CORE_CNFREADER_H_
+#define INCLUDE_SAT_CORE_CNFREADER_H_
 
 namespace sat {
 namespace io {
@@ -31,4 +31,4 @@ class CNFReader {
 }  // namespace io
 }  // namespace sat
 
-#endif  // SAT_CORE_CNFREADER_H_
+#endif  // INCLUDE_SAT_CORE_CNFREADER_H_
