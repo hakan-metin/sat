@@ -68,12 +68,13 @@ test: CFLAGS += -O0 --coverage -fprofile-arcs -ftest-coverage -fPIC
 test: gtest $(BIN)test
 run-test: test
 	./$(BIN)test
-run-test-valgrind: test
+run-test-valgrind: test FORCE
 	$(call cmd-valgrind, ./$(BIN)test)
-run-test-gdb: test
+run-test-gdb: test FORCE
 	$(call cmd-gdb, ./$(BIN)test)
 run-test-coverage: run-test
 	$(call cmd-gcovr, $(OBJ)tests/$(SRC))
+FORCE:
 
 ################################################################################
 

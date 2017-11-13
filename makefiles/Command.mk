@@ -32,9 +32,9 @@ endef
 
 # Call valgrind
 # Arg1 = binary
-define cmd-gdb
-  $(call cmd-echo,   GDB    $(strip $(call cmd-format, $(1))))
-  $(Q) valgrind --leak-check=full $(1)
+define cmd-valgrind
+  $(call cmd-echo, VALGRIND $(strip $(call cmd-format, $(1))))
+  $(Q) valgrind --leak-check=full --show-leak-kinds=all $(1)
 endef
 
 define cmd-clean
