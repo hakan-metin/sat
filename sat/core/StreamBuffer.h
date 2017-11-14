@@ -29,7 +29,7 @@ enum StreamBufferError {
     CANNOT_OPEN_FILE,
     NUM_VARS_MISMATCH,
     NUM_CLAUSES_MISMATCH,
-    MALFORMED_CLAUSE
+    ERROR_PARSE_INT
 };
 
 class StreamBuffer {
@@ -40,9 +40,12 @@ class StreamBuffer {
     ~StreamBuffer();
 
     int readInt();
+    void skipWhiteSpaces();
+    int operator*();
+    void operator++();
 
     bool isValid() const;
-    std::string errorString() const;
+    StreamBufferError error() const;
 
  private:
     gzFile _in;

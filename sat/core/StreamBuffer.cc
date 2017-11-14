@@ -43,12 +43,31 @@ int StreamBuffer::readInt() {
         value = (value * 10) + (_buffer[_index] - '0');
 
     if (!std::isspace(c) || c != '\0')
-        _error = MALFORMED_CLAUSE;
+        _error = ERROR_PARSE_INT;
 
     return negative ? -value : value;
 }
 
+void StreamBuffer::skipWhiteSpaces() {
+    unsigned char c;
+
+    while ((c = read()) != '\0' && std::isspace(c))
+        ;
+}
+
+int StreamBuffer::operator*() {
+    return read();
+}
+
+void StreamBuffer::operator++() {
+    _index++;
+}
+
 unsigned char StreamBuffer::read() {
+    if (_index >= _size) {
+        _size = gzread(_in, _buffer, sizeof(_buffer));
+        _index = 0;
+    }
     return (_index >= _size) ? '\0' : _buffer[_index];
 }
 
@@ -57,15 +76,17 @@ bool StreamBuffer::isValid() const {
     return _error == SUCCESS;
 }
 
-std::string StreamBuffer::errorString() const {
-    switch(_error) {
-    case SUCCESS: return std::string("Success");
-    case CANNOT_OPEN_FILE: return std::string("Cannot open file ");
-    case NUM_VARS_MISMATCH: return std::string("Header num vars mismatch");
-    case NUM_CLAUSES_MISMATCH: return std::string("Header num clause mismatch");
-    case MALFORMED_CLAUSE: return std::string("Malformed clause");
-    }
-    return std::string("Unknown error");
+StreamBufferError StreamBuffer::error() const {
+    return _error;
+
+    // switch(_error) {
+    // case SUCCESS: return std::string("Success");
+    // case CANNOT_OPEN_FILE: return std::string("Cannot open file ");
+    // case NUM_VARS_MISMATCH: return std::string("Header num vars mismatch");
+    // case NUM_CLAUSES_MISMATCH: return std::string("Header num clause mismatch");
+    // case MALFORMED_CLAUSE: return std::string("Malformed clause");
+    // }
+    // return std::string("Unknown error");
 }
 
 }  // namespace io
