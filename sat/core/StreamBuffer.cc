@@ -1,4 +1,5 @@
 #include "core/StreamBuffer.h"
+#include "util/logging.h"
 
 namespace sat {
 namespace io {
@@ -36,13 +37,20 @@ int StreamBuffer::readInt() {
     int value = 0;
 
     unsigned char c = read();
-    if (c == '-')
+    if (c == '-') {
         negative = true;
+        ++(*this);
+    } else if (c == '+') {
+        negative = false;
+        ++(*this);
+    }
 
-    while ((c = read()) != '\0' &&  c >= '0' && c <= '9')
+    while ((c = read()) != '\0' &&  c >= '0' && c <= '9') {
         value = (value * 10) + (_buffer[_index] - '0');
+        ++(*this);
+    }
 
-    if (!std::isspace(c) || c != '\0')
+    if (!std::isspace(c) && c != '\0')
         _error = ERROR_PARSE_INT;
 
     return negative ? -value : value;
@@ -51,16 +59,28 @@ int StreamBuffer::readInt() {
 void StreamBuffer::skipWhiteSpaces() {
     unsigned char c;
 
-    while ((c = read()) != '\0' && std::isspace(c))
-        ;
+    while ((c = read()) != '\0' && std::isspace(c)) {
+        _index++;
+    }
 }
 
+void StreamBuffer::skipLine() {
+    unsigned char c;
+
+    while ((c = read()) != '\0' && c != '\n') {
+        _index++;
+    }
+    ++(*this);
+}
+
+
 int StreamBuffer::operator*() {
-    return read();
+    return static_cast<int>(read());
 }
 
 void StreamBuffer::operator++() {
     _index++;
+    read();
 }
 
 unsigned char StreamBuffer::read() {

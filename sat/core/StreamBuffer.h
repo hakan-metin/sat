@@ -41,6 +41,8 @@ class StreamBuffer {
 
     int readInt();
     void skipWhiteSpaces();
+    void skipLine();
+
     int operator*();
     void operator++();
 
