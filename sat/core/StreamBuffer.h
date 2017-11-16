@@ -27,14 +27,11 @@ namespace io {
 enum StreamBufferError {
     SUCCESS,
     CANNOT_OPEN_FILE,
-    NUM_VARS_MISMATCH,
-    NUM_CLAUSES_MISMATCH,
     ERROR_PARSE_INT
 };
 
 class StreamBuffer {
  public:
-    StreamBuffer();
     explicit StreamBuffer(const std::string& filename);
     explicit StreamBuffer(const char * filename);
     ~StreamBuffer();

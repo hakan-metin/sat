@@ -4,13 +4,6 @@
 namespace sat {
 namespace io {
 
-StreamBuffer::StreamBuffer() :
-        _in(nullptr),
-        _index(0),
-        _size(0),
-        _error(CANNOT_OPEN_FILE) {
-}
-
 StreamBuffer::StreamBuffer(const std::string& filename) :
     StreamBuffer(filename.c_str()) {
 }
@@ -50,8 +43,10 @@ int StreamBuffer::readInt() {
         ++(*this);
     }
 
-    if (!std::isspace(c) && c != '\0')
+    if (!std::isspace(c) && c != '\0') {
         _error = ERROR_PARSE_INT;
+        return 0;
+    }
 
     return negative ? -value : value;
 }
