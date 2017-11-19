@@ -15,6 +15,12 @@
 #ifndef INCLUDE_SAT_CORE_CNFREADER_H_
 #define INCLUDE_SAT_CORE_CNFREADER_H_
 
+#include "util/logging.h"
+
+#include "core/CNFModel.h"
+#include "core/literal.h"
+#include "core/StreamBuffer.h"
+
 namespace sat {
 namespace io {
 
@@ -23,7 +29,7 @@ class CNFReader {
     CNFReader();
     ~CNFReader();
 
-    bool load(const std::string &filename);
+    bool load(const std::string &filename, sat::core::CNFModel *model);
 
  private:
     DISALLOW_COPY_AND_ASSIGN(CNFReader);
