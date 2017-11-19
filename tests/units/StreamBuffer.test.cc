@@ -101,6 +101,7 @@ TEST(StreamBuffer, read_int_error) {
 
     value = stream.readInt();
     ASSERT_EQ(stream.error(), ERROR_PARSE_INT);
+    ASSERT_EQ(value, 0);
 }
 
 

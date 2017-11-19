@@ -45,8 +45,10 @@ class StreamBuffer {
 
     bool isValid() const;
     StreamBufferError error() const;
+    std::string errorMessage() const;
 
  private:
+    const std::string _filename;
     gzFile _in;
     unsigned char _buffer[kBufferSize];
     unsigned int _index;

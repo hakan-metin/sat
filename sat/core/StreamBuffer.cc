@@ -9,6 +9,7 @@ StreamBuffer::StreamBuffer(const std::string& filename) :
 }
 
 StreamBuffer::StreamBuffer(const char* filename) :
+        _filename(filename),
         _in(nullptr),
         _index(0),
         _size(0),
@@ -93,15 +94,15 @@ bool StreamBuffer::isValid() const {
 
 StreamBufferError StreamBuffer::error() const {
     return _error;
+}
 
-    // switch(_error) {
-    // case SUCCESS: return std::string("Success");
-    // case CANNOT_OPEN_FILE: return std::string("Cannot open file ");
-    // case NUM_VARS_MISMATCH: return std::string("Header num vars mismatch");
-    // case NUM_CLAUSES_MISMATCH: return std::string("Header num clause mismatch");
-    // case MALFORMED_CLAUSE: return std::string("Malformed clause");
-    // }
-    // return std::string("Unknown error");
+std::string StreamBuffer::errorMessage() const {
+    switch(_error) {
+    case SUCCESS: return std::string("Success");
+    case CANNOT_OPEN_FILE: return std::string("Cannot open file " + _filename);
+    case ERROR_PARSE_INT: return std::string("value is not an integer");
+    }
+    return std::string("Unknown error");
 }
 
 }  // namespace io
