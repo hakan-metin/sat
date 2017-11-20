@@ -15,6 +15,13 @@
 #ifndef SAT_CORE_CNFMODEL_H_
 #define SAT_CORE_CNFMODEL_H_
 
+#include <memory>
+#include <vector>
+
+#include "core/clause.h"
+#include "core/literal.h"
+#include "util/logging.h"
+
 namespace sat {
 namespace core {
 
@@ -23,9 +30,13 @@ class CNFModel {
     CNFModel();
     ~CNFModel();
 
+    void addClause(const std::vector<Literal>& literals);
 
  private:
-
+    std::vector<std::unique_ptr<Clause>> _unary_clauses;
+    std::vector<std::unique_ptr<Clause>> _binary_clauses;
+    std::vector<std::unique_ptr<Clause>> _ternary_clauses;
+    std::vector<std::unique_ptr<Clause>> _clauses;
 
     DISALLOW_COPY_AND_ASSIGN(CNFModel);
 };
