@@ -15,7 +15,7 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
     unsigned int expected_num_vars = 0, expected_num_clauses = 0;
     int read_int;
 
-    std::vector<sat::core::Literal> clause;
+    std::vector<sat::core::Literal> literals;
 
     if (!in.isValid())
         LOG(FATAL) << in.errorMessage() << std::endl;
@@ -46,10 +46,11 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
 
                 if (read_int != 0) {
                     sat::core::Literal lit(read_int);
-                    clause.push_back(lit);
+                    literals.push_back(lit);
                 }
             } while (read_int != 0);
-            clause.clear();
+            model->addClause(literals);
+            literals.clear();
         }
     }
 
