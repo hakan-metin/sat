@@ -6,9 +6,9 @@ namespace core {
 // static
 Clause* Clause::create(const std::vector<Literal>& literals,
                        bool is_redundant) {
-    CHECK_GE(literals.size(), 2);
+    CHECK_GE(literals.size(), static_cast<unsigned int>(2));
 
-    Clause * clause = reinterpret_cast<Clause*>(
+    Clause *clause = reinterpret_cast<Clause*>(
         ::operator new(sizeof(Clause) + literals.size() * sizeof(Literal)));
 
     clause->_size  = literals.size();
