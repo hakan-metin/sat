@@ -49,7 +49,7 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
                     literals.push_back(lit);
                 }
             } while (read_int != 0);
-            model->addClause(literals);
+            model->addClause(&literals);
             literals.clear();
         }
     }

@@ -15,6 +15,7 @@
 #ifndef SAT_CORE_CNFMODEL_H_
 #define SAT_CORE_CNFMODEL_H_
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -30,7 +31,7 @@ class CNFModel {
     CNFModel();
     ~CNFModel();
 
-    void addClause(const std::vector<Literal>& literals);
+    void addClause(std::vector<Literal>* literals);
 
  private:
     std::vector<std::unique_ptr<Clause>> _unary_clauses;
