@@ -33,7 +33,11 @@ class CNFModel {
 
     void addClause(std::vector<Literal>* literals);
 
+    unsigned int numberOfVariables() const;
+    unsigned int numberOfClauses() const;
+
  private:
+    unsigned int _num_variables;
     std::vector<std::unique_ptr<Clause>> _unary_clauses;
     std::vector<std::unique_ptr<Clause>> _binary_clauses;
     std::vector<std::unique_ptr<Clause>> _ternary_clauses;

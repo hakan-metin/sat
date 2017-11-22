@@ -16,7 +16,7 @@
 namespace sat {
 namespace core {
 
-CNFModel::CNFModel() {
+CNFModel::CNFModel() : _num_variables(0) {
 }
 
 CNFModel::~CNFModel() {
@@ -30,6 +30,10 @@ void CNFModel::addClause(std::vector<Literal>* literals) {
     auto last_element_it = std::unique(literals->begin(), literals->end());
     literals->erase(last_element_it, literals->end());
 
+    BooleanVariable var = literals->back().variable();
+    if (var > _num_variables)
+        _num_variables = var.value();
+
     std::unique_ptr<Clause> clause
         (Clause::create(*literals, /* is_redundant= */ false));
 
@@ -39,6 +43,13 @@ void CNFModel::addClause(std::vector<Literal>* literals) {
     case 3:  _ternary_clauses.emplace_back(clause.release()); break;
     default: _clauses.emplace_back(clause.release());         break;
     }
+}
+
+unsigned int CNFModel::numberOfVariables() const {
+    return _num_variables + 1; // Because start from 0
+}
+unsigned int CNFModel::numberOfClauses() const {
+    return _binary_clauses.size() + _ternary_clauses.size() +_clauses.size();
 }
 
 }  // namespace core
