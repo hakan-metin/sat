@@ -25,9 +25,11 @@ namespace core {
 
 class Assignment {
  public:
-        Assignment();
-        explicit Assignment(unsigned int num_variables);
-        ~Assignment();
+        Assignment() {}
+        explicit Assignment(unsigned int num_variables) {
+            resize(num_variables);
+        }
+        ~Assignment() {}
 
         void resize(unsigned int num_variables);
         void assignFromTrueLiteral(Literal literal);
