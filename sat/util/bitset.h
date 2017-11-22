@@ -39,7 +39,7 @@
 #include "util/integral_types.h"
 #include "util/logging.h"
 
-namespace operations_research {
+namespace sat {
 
 // Basic bit operations
 
@@ -867,6 +867,6 @@ class SparseBitset {
         DISALLOW_COPY_AND_ASSIGN(SparseBitset);
 };
 
-}  // namespace operations_research
+}  // namespace sat
 
 #endif  // SAT_UTIL_BITSET_H_

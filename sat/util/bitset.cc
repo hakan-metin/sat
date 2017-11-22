@@ -20,7 +20,7 @@
 //              "threshold to count bits with buckets");
 
 static const int FLAGS_bitset_small_bitset_count = 8;
-namespace operations_research {
+namespace sat {
 
 // ---------- Bit Operations ----------
 
@@ -255,4 +255,4 @@ UNSAFE_MOST_SIGNIFICANT_BIT_POSITION(32)
 
 #undef UNSAFE_MOST_SIGNIFICANT_BIT_POSITION
 
-}  // namespace operations_research
+}  // namespace sat
