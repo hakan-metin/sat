@@ -13,7 +13,17 @@
 
 #include <iostream>
 
+#include "core/CNFReader.h"
+#include "core/CNFModel.h"
+
 int main() {
     std::cout << "Hello" << std::endl;
+    std::string cnf_filename("/data/hmetin/cnfs/hole/hole005.cnf");
+    sat::core::CNFModel model;
+    sat::io::CNFReader reader;
+
+    reader.load(cnf_filename, &model);
+
+
     return 0;
 }
