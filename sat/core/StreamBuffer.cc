@@ -43,6 +43,8 @@ int StreamBuffer::readInt() {
     bool negative = false;
     int value = 0;
 
+    skipWhiteSpaces();
+
     unsigned char c = read();
     if (c == '-') {
         negative = true;
