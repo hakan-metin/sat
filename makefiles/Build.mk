@@ -6,9 +6,8 @@ GLOG_DIR  = $(THIRD_PARTY)glog/build/
 
 exec  := sat_runner
 
-sources := $(wildcard $(SRC)core/*.cc)
-headers_dir = include/
-headers := $(wildcard $(headers_dir)dsb/*.h)
+sources := $(wildcard $(SRC)core/*.cc $(SRC)util/*.cc)
+headers := $(wildcard $(SRC)core/*.h $(SRC)util/*.h)
 
 objects         := $(patsubst %.cc, $(OBJ)%.o, $(sources))
 release_objects := $(patsubst %.cc, $(OBJ)release/%.o, $(sources))
