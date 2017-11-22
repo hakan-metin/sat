@@ -2,7 +2,7 @@
 THIRD_PARTY = third_party/
 
 GTEST_DIR = $(THIRD_PARTY)gtest/googletest/build/
-GLOG_DIR  = $(THIRD_PARTY)glog/build/
+GLOG_DIR  = $(THIRD_PARTY)glog/
 
 exec  := sat_runner
 
@@ -38,7 +38,7 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
 
-CFLAGS += -I$(SRC) -I$(GLOG_DIR)
+CFLAGS += -I$(SRC) #-I$(GLOG_DIR)include
 LDFLAGS += -lglog
 
 default: CFLAGS += -O3 -fPIC -Wall -Wextra
@@ -51,7 +51,7 @@ debug: CFLAGS += -O0 -fPIC -Wall -Wextra -g  -D DEBUG
 debug: $(BIN)$(exec)_debug
 
 
-glog: $(GLOG_DIR)libglog.a
+glog: $(GLOG_DIR)lib/libglog.a
 gtest: $(GTEST_DIR)libgtest.a
 
 .PHONY: glog gtest
