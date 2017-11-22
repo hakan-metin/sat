@@ -45,10 +45,10 @@ void CNFModel::addClause(std::vector<Literal>* literals) {
     }
 }
 
-unsigned int CNFModel::numberOfVariables() const {
+int64 CNFModel::numberOfVariables() const {
     return _num_variables + 1; // Because start from 0
 }
-unsigned int CNFModel::numberOfClauses() const {
+int64 CNFModel::numberOfClauses() const {
     return _binary_clauses.size() + _ternary_clauses.size() +_clauses.size();
 }
 
