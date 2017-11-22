@@ -562,7 +562,7 @@ class Bitset64 {
         // the same size.
         template <typename OtherIndexType>
         void SetContentFromBitsetOfSameSize(
-                                        const Bitset64<OtherIndexType>& other) {
+                                            const Bitset64<OtherIndexType>& other) {
             DCHECK_EQ(Value(size()), other.Value(other.size()));
             memcpy(data_.data(), other.data_.data(), data_.size() *
                    sizeof(uint64));
