@@ -11,10 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef INCLUDE_SAT_CORE_CLAUSE_H_
-#define INCLUDE_SAT_CORE_CLAUSE_H_
+#ifndef SAT_CORE_CLAUSE_H_
+#define SAT_CORE_CLAUSE_H_
 
 #include <string>
+#include <vector>
 
 #include "core/literal.h"
 #include "util/logging.h"
@@ -55,4 +56,4 @@ class Clause {
 }  // namespace core
 }  // namespace sat
 
-#endif  // INCLUDE_SAT_CORE_CLAUSE_H_
+#endif  // SAT_CORE_CLAUSE_H_

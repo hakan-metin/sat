@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef INCLUDE_SAT_CORE_LITERAL_H_
-#define INCLUDE_SAT_CORE_LITERAL_H_
+#ifndef SAT_CORE_LITERAL_H_
+#define SAT_CORE_LITERAL_H_
 
 #include <string>
 
@@ -91,4 +91,4 @@ class Literal {
 
 }  // namespace core
 }  // namespace sat
-#endif  // INCLUDE_SAT_CORE_LITERAL_H_
+#endif  // SAT_CORE_LITERAL_H_

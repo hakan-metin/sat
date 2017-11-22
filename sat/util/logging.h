@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef INCLUDE_SAT_UTIL_LOGGING_H_
-#define INCLUDE_SAT_UTIL_LOGGING_H_
+#ifndef SAT_UTIL_LOGGING_H_
+#define SAT_UTIL_LOGGING_H_
 
 #include <cassert>
 
@@ -22,4 +22,4 @@
 #include "util/integral_types.h"
 #include "util/macros.h"
 
-#endif  // INCLUDE_SAT_UTIL_LOGGING_H_
+#endif  // SAT_UTIL_LOGGING_H_

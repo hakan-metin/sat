@@ -12,14 +12,16 @@
 // limitations under the License.
 
 
-#ifndef INCLUDE_SAT_CORE_CNFREADER_H_
-#define INCLUDE_SAT_CORE_CNFREADER_H_
+#ifndef SAT_CORE_CNFREADER_H_
+#define SAT_CORE_CNFREADER_H_
 
-#include "util/logging.h"
+#include <vector>
+#include <string>
 
 #include "core/CNFModel.h"
 #include "core/literal.h"
 #include "core/StreamBuffer.h"
+#include "util/logging.h"
 
 namespace sat {
 namespace io {
@@ -37,4 +39,4 @@ class CNFReader {
 }  // namespace io
 }  // namespace sat
 
-#endif  // INCLUDE_SAT_CORE_CNFREADER_H_
+#endif  // SAT_CORE_CNFREADER_H_
