@@ -42,7 +42,7 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
             ++in; assert(*in == 'c');
             ++in; assert(*in == 'n');
             ++in; assert(*in == 'f');
-            ++in; assert(*in == ' ');
+            ++in;
 
             expected_num_vars = in.readInt();
             if (!in.isValid())
@@ -51,21 +51,31 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
             expected_num_clauses = in.readInt();
             if (!in.isValid())
                 LOG(FATAL) << in.errorMessage() << std::endl;
+            in.skipLine();
         } else {
+            literals.clear();
             do {
                 read_int = in.readInt();
                 if (!in.isValid())
                     LOG(FATAL) << in.errorMessage() << std::endl;
-
                 if (read_int != 0) {
                     sat::core::Literal lit(read_int);
                     literals.push_back(lit);
                 }
             } while (read_int != 0);
             model->addClause(&literals);
-            literals.clear();
+            in.skipLine();
         }
+        in.skipWhiteSpaces();
     }
+
+    if (model->numberOfVariables() != expected_num_vars)
+        LOG(FATAL) << "Expected " << expected_num_vars << " variables: found: "
+                   <<  model->numberOfVariables();
+
+    if (model->numberOfClauses() != expected_num_clauses)
+        LOG(FATAL) << "Expected " << expected_num_clauses << " clauses: found: "
+                   <<  model->numberOfClauses();
 
     return true;
 }
