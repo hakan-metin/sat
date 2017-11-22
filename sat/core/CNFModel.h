@@ -19,8 +19,8 @@
 #include <memory>
 #include <vector>
 
-#include "core/clause.h"
-#include "core/literal.h"
+#include "core/Clause.h"
+#include "core/Literal.h"
 #include "util/logging.h"
 
 namespace sat {

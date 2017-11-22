@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include "core/literal.h"
+#include "core/Literal.h"
 #include "util/logging.h"
 
 namespace sat {

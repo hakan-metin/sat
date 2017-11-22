@@ -19,7 +19,7 @@
 #include <string>
 
 #include "core/CNFModel.h"
-#include "core/literal.h"
+#include "core/Literal.h"
 #include "core/StreamBuffer.h"
 #include "util/logging.h"
 

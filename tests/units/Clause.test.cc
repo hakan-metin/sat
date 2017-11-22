@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include "core/literal.h"
-#include "core/clause.h"
+#include "core/Literal.h"
+#include "core/Clause.h"
 
 namespace sat {
 namespace core {

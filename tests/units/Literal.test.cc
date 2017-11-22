@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "core/literal.h"
+#include "core/Literal.h"
 
 namespace sat {
 namespace core {
