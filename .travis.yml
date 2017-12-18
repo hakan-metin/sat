@@ -8,4 +8,4 @@ matrix:
       compiler: gcc
 
 script:
-  - make run-test
+  - make run-test V=3
