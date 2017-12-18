@@ -1,4 +1,5 @@
 SRC := sat/
+INC := include/
 BIN := bin/
 LIB := lib/
 OBJ := obj/
