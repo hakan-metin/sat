@@ -76,9 +76,6 @@ $(OBJ)%.a:
 $(OBJ)%.o: %.cc
 	$(call cmd-cxx, $@, $<, $(CFLAGS))
 
-$(OBJ)%.test.o: %.test.cc
-	$(call cmd-cxx, $@, $<, $(CFLAGS_TEST))
-
 .depends: .generate
 	$(call cmd-dep, $@, $(filter %.d, $^))
 

@@ -95,11 +95,16 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 	$(call cmd-ld, $@, $^)
 
-$(BIN)test: $(tests_objects)
-	$(call cmd-ld, $@, $^, $(LDFLAGS_TEST))
-
 $(OBJ)release/%.o: %.cc
 	$(call cmd-cxx, $@, $<, $(CFLAGS))
 
 $(OBJ)debug/%.o: %.cc
 	$(call cmd-cxx, $@, $<, $(CFLAGS))
+
+##
+
+$(OBJ)%.test.o: %.test.cc
+	$(call cmd-cxx, $@, $<, $(CFLAGS_TEST))
+
+$(BIN)test: $(tests_objects)
+	$(call cmd-ld, $@, $^, $(LDFLAGS_TEST))
