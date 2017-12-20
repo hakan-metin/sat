@@ -11,19 +11,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <iostream>
 
-#include "core/CNFReader.h"
+#ifndef SAT_CORE_CNFREADER_H_
+#define SAT_CORE_CNFREADER_H_
+
+#include <vector>
+#include <string>
+
 #include "core/CNFModel.h"
+#include "core/Literal.h"
+#include "core/StreamBuffer.h"
+#include "util/logging.h"
 
-int main() {
-    std::cout << "Hello" << std::endl;
-    std::string cnf_filename("/data/hmetin/cnfs/hole/hole005.cnf");
-    sat::core::CNFModel model;
-    sat::io::CNFReader reader;
+namespace sat {
+namespace io {
 
-    reader.load(cnf_filename, &model);
+class CNFReader {
+ public:
+    CNFReader();
+    ~CNFReader();
 
+    bool load(const std::string &filename, sat::core::CNFModel *model);
 
-    return 0;
-}
+ private:
+    DISALLOW_COPY_AND_ASSIGN(CNFReader);
+};
+}  // namespace io
+}  // namespace sat
+
+#endif  // SAT_CORE_CNFREADER_H_

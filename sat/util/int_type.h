@@ -141,15 +141,15 @@
 //  void GetGlobalDoc(int64 global) { ...
 //  GetGlobalDoc(local.value());                  <-- Compiles fine.
 
-#ifndef OR_TOOLS_BASE_INT_TYPE_H_
-#define OR_TOOLS_BASE_INT_TYPE_H_
+#ifndef SAT_UTIL_INT_TYPE_H_
+#define SAT_UTIL_INT_TYPE_H_
 
 #include <stddef.h>
 #include <unordered_map>
 #include <iosfwd>
 #include <ostream>  // NOLINT
 
-#include "ortools/base/macros.h"
+#include "util/macros.h"
 
 template <typename IntTypeName, typename _ValueType>
 class IntType;
@@ -336,4 +336,4 @@ struct hash<IntType<IntTypeName, ValueType> > {
 };
 }  // namespace std
 
-#endif  // OR_TOOLS_BASE_INT_TYPE_H_
+#endif  // SAT_UTIL_INT_TYPE_H_

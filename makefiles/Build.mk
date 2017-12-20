@@ -7,7 +7,6 @@ GLOG_DIR  = $(THIRD_PARTY)glog/build/
 exec  := sat_runner
 
 sources := $(wildcard $(SRC)core/*.cc)
-
 objects         := $(patsubst %.cc, $(OBJ)%.o, $(sources))
 release_objects := $(patsubst %.cc, $(OBJ)release/%.o, $(sources))
 debug_objects   := $(patsubst %.cc, $(OBJ)debug/%.o, $(sources))
@@ -16,7 +15,6 @@ tests := $(wildcard tests/units/*.test.cc)
 tests_objects := $(patsubst %.cc, $(OBJ)%.o, $(tests))
 tests_objects += $(debug_objects)
 tests_objects := $(filter-out %$(exec).o, $(tests_objects))
-
 
 $(call REQUIRE-DIR, $(objects))
 $(call REQUIRE-DIR, $(BIN)$(exec))
@@ -28,7 +26,7 @@ $(call REQUIRE-DIR, $(debug_objects))
 $(call REQUIRE-DIR, $(BIN)$(exec)_debug)
 
 $(call REQUIRE-DIR, $(tests_objects))
-$(call REQUIRE-DIR,  $(BIN)test)
+$(call REQUIRE-DIR, $(BIN)test)
 
 $(call REQUIRE-DEP, $(sources))
 $(call REQUIRE-DEP, $(tests))
@@ -38,7 +36,8 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
 
-CFLAGS += -I$(SRC) -I$(GLOG_DIR)
+CFLAGS += -I$(SRC) #-I$(GLOG_DIR)include
+LDFLAGS += -lglog
 
 default: CFLAGS += -O3 -fPIC -Wall -Wextra
 default: $(BIN)$(exec)
@@ -50,6 +49,7 @@ debug: CFLAGS += -O0 -fPIC -Wall -Wextra -g  -D DEBUG
 debug: $(BIN)$(exec)_debug
 
 glog: $(GLOG_DIR)libglog.a
+
 gtest: $(GTEST_DIR)libgtest.a
 
 .PHONY: glog gtest
@@ -60,8 +60,9 @@ gtest: $(GTEST_DIR)libgtest.a
 
 test: export LIBRARY_PATH=${GTEST_DIR}
 CFLAGS_TEST = $(CFLAGS) -isystem ${GTEST_DIR}/include -I${GTEST_DIR}
-LDFLAGS_TEST = $(LDFLAGS) -lgtest -lgtest_main -lpthread
+LDFLAGS_TEST = $(LDFLAGS) -lgtest -lgtest_main -lpthread -lgcov
 
+test: CFLAGS += -O0 --coverage -fprofile-arcs -ftest-coverage -fPIC
 test: gtest $(BIN)test
 run-test: test
 	$(call 	cmd-call, ./$(BIN)test)
