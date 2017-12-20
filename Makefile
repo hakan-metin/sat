@@ -73,9 +73,6 @@ $(OBJ)%.a:
 
 # Generic rules
 
-$(OBJ)%.o: %.cc
-	$(call cmd-cxx, $@, $<, $(CFLAGS))
-
 .depends: .generate
 	$(call cmd-dep, $@, $(filter %.d, $^))
 
