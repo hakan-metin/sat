@@ -1,8 +1,10 @@
-
 THIRD_PARTY = third_party/
 
 GTEST_DIR = $(THIRD_PARTY)gtest/googletest/
 GLOG_DIR  = $(THIRD_PARTY)glog/
+
+export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
+export LD_LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
 
 exec  := sat_runner
 
@@ -31,14 +33,15 @@ $(call REQUIRE-DIR, $(BIN)test)
 $(call REQUIRE-DEP, $(sources))
 $(call REQUIRE-DEP, $(tests))
 
+
 $(BIN)$(exec): $(objects)
 $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
 
-CFLAGS += -I$(SRC) -I$(GLOG_DIR)include/
-LDFLAGS += -L $(GLOG_DIR)/lib -lglog
 
+CFLAGS += -I$(SRC) -I$(GLOG_DIR)include/
+LDFLAGS += -lglog
 
 third_party: glog gtest
 
@@ -61,8 +64,6 @@ gtest: $(GTEST_DIR)libgtest.a
 ################################################################################
 # TESTS
 
-test: export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
-test: export LD_LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
 test: CFLAGS += -isystem ${GTEST_DIR}/include -O0 --coverage -fPIC
 test: LDFLAGS += -lgtest -lgtest_main -lpthread -lgcov
 test: $(BIN)test
