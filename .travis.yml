@@ -9,4 +9,4 @@ matrix:
 
 script:
   - make third_party
-  - make run-test V=3
+  - make run-test

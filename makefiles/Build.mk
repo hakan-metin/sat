@@ -61,7 +61,8 @@ gtest: $(GTEST_DIR)libgtest.a
 ################################################################################
 # TESTS
 
-test: export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}
+test: export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
+test: export LD_LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
 test: CFLAGS += -isystem ${GTEST_DIR}/include -O0 --coverage -fPIC
 test: LDFLAGS += -lgtest -lgtest_main -lpthread -lgcov
 test: $(BIN)test
