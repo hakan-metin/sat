@@ -62,11 +62,11 @@ gtest: $(GTEST_DIR)libgtest.a
 # TESTS
 
 test: export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}
-CFLAGS_TEST = $(CFLAGS) -isystem ${GTEST_DIR}/include -I${GTEST_DIR}
-LDFLAGS_TEST = $(LDFLAGS) -lgtest -lgtest_main -lpthread -lgcov -lglog
+CFLAGS_TEST = $(CFLAGS) -isystem ${GTEST_DIR}/include
+LDFLAGS_TEST = $(LDFLAGS) -lgtest -lgtest_main -lpthread -lgcov
 
 test: CFLAGS += -O0 --coverage -fprofile-arcs -ftest-coverage -fPIC
-test: gtest glog $(BIN)test
+test: $(BIN)test
 run-test: test
 	$(call 	cmd-call, ./$(BIN)test)
 run-test-valgrind: test
