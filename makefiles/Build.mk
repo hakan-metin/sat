@@ -2,7 +2,7 @@
 THIRD_PARTY = third_party/
 
 GTEST_DIR = $(THIRD_PARTY)gtest/googletest/
-GLOG_DIR  = $(THIRD_PARTY)glog/build/
+GLOG_DIR  = $(THIRD_PARTY)glog/
 
 exec  := sat_runner
 
@@ -36,8 +36,11 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
 
-CFLAGS += -I$(SRC) #-I$(GLOG_DIR)include
-LDFLAGS += -lglog
+CFLAGS += -I$(SRC) -I$(GLOG_DIR)include/
+LDFLAGS += -L $(GLOG_DIR)/lib -lglog
+
+
+third_party: glog gtest
 
 default: CFLAGS += -O3 -fPIC -Wall -Wextra
 default: $(BIN)$(exec)
@@ -58,12 +61,12 @@ gtest: $(GTEST_DIR)libgtest.a
 ################################################################################
 # TESTS
 
-test: export LIBRARY_PATH=${GTEST_DIR}
+test: export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}
 CFLAGS_TEST = $(CFLAGS) -isystem ${GTEST_DIR}/include -I${GTEST_DIR}
-LDFLAGS_TEST = $(LDFLAGS) -lgtest -lgtest_main -lpthread -lgcov
+LDFLAGS_TEST = $(LDFLAGS) -lgtest -lgtest_main -lpthread -lgcov -lglog
 
 test: CFLAGS += -O0 --coverage -fprofile-arcs -ftest-coverage -fPIC
-test: gtest $(BIN)test
+test: gtest glog $(BIN)test
 run-test: test
 	$(call 	cmd-call, ./$(BIN)test)
 run-test-valgrind: test
@@ -95,6 +98,10 @@ $(BIN)$(exec)_release: $(release_objects)
 
 $(BIN)$(exec)_debug: $(debug_objects)
 	$(call cmd-ld, $@, $^)
+
+
+$(OBJ)%.o: %.cc
+	$(call cmd-cxx, $@, $<, $(CFLAGS))
 
 $(OBJ)release/%.o: %.cc
 	$(call cmd-cxx, $@, $<, $(CFLAGS))
