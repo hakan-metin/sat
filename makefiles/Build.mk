@@ -62,10 +62,8 @@ gtest: $(GTEST_DIR)libgtest.a
 # TESTS
 
 test: export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}
-CFLAGS_TEST = $(CFLAGS) -isystem ${GTEST_DIR}/include
-LDFLAGS_TEST = $(LDFLAGS) -lgtest -lgtest_main -lpthread -lgcov
-
-test: CFLAGS += -O0 --coverage -fprofile-arcs -ftest-coverage -fPIC
+test: CFLAGS += -isystem ${GTEST_DIR}/include -O0 --coverage -fPIC
+test: LDFLAGS += -lgtest -lgtest_main -lpthread -lgcov
 test: $(BIN)test
 run-test: test
 	$(call 	cmd-call, ./$(BIN)test)
@@ -112,7 +110,7 @@ $(OBJ)debug/%.o: %.cc
 ##
 
 $(OBJ)%.test.o: %.test.cc
-	$(call cmd-cxx, $@, $<, $(CFLAGS_TEST))
+	$(call cmd-cxx, $@, $<, $(CFLAGS))
 
 $(BIN)test: $(tests_objects)
-	$(call cmd-ld, $@, $^, $(LDFLAGS_TEST))
+	$(call cmd-ld, $@, $^, $(LDFLAGS))
