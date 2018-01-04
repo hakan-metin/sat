@@ -1,20 +1,23 @@
 #! /bin/bash
 # Build googletest library used for testing solver
+# Prerequisite: make submodules
 
-if ! [[ -d third_party/gtest ]]; then
+
+if ! [[ -d third_party/googletest/ ]]; then
     git clone https://github.com/google/googletest.git third_party/gtest
+    cd third_party/gtest
+    git checkout release-1.8.0
+    cd -
 fi
 
-GTEST_DIR="third_party/gtest/googletest/"
+LIB_DIR='third_party/gtest/googletest/build/'
 
-if ! [[ -e "$GTEST_DIR"libgtest.a ]]; then
-    g++ -isystem $GTEST_DIR/include -I${GTEST_DIR} \
-        -pthread -c ${GTEST_DIR}/src/gtest-all.cc -o ${GTEST_DIR}/gtest-all.o
-    ar -rv ${GTEST_DIR}/libgtest.a ${GTEST_DIR}/gtest-all.o
+if [[ -e "$LIB_DIR"libgtest.a ]] && [[ -e "$LIB_DIR"libgtest_main.a ]]; then
+    exit 0
 fi
 
-if ! [[ -e "$GTEST_DIR"libgtest_main.a ]]; then
-    g++ -isystem $GTEST_DIR/include -I${GTEST_DIR} \
-        -pthread -c ${GTEST_DIR}/src/gtest_main.cc -o ${GTEST_DIR}/gtest_main.o
-    ar -rv ${GTEST_DIR}/libgtest_main.a ${GTEST_DIR}/gtest_main.o
-fi
+mkdir -p "$LIB_DIR"
+cd "$LIB_DIR"
+cmake ..
+make
+cd -

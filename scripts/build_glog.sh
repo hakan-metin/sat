@@ -2,14 +2,20 @@
 # Build googlelog library used for logging
 
 
-GLOG_DIR='third_party/glog/'
-
-if ! [[ -d "${GLOG_DIR}" ]]; then
-    git clone https://github.com/google/glog.git "${GLOG_DIR}"
-fi
-
-if ! [[ -e "${GLOG_DIR}"lib/libglog.a ]] ; then
-    cd "${GLOG_DIR}"
-    ./autogen.sh && ./configure --prefix=$PWD && make && make install
+if ! [[ -d third_party/glog ]]; then
+    git clone https://github.com/google/glog.git third_party/glog
+    cd third_party/glog
     cd -
 fi
+
+
+LIB_DIR='third_party/glog/'
+
+if [[ -e "$LIB_DIR"lib/libglog.a ]] ; then
+    exit 0
+fi
+
+
+cd "$LIB_DIR"
+./autogen.sh && ./configure --prefix=$PWD && make && make install
+cd -
