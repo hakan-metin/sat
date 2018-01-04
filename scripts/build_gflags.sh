@@ -11,8 +11,8 @@ if [[ -e "${LIB_DIR}"lib/libgflags.a ]] ; then
     exit 0
 fi
 
-cd "$LIB_DIR"
-mkdir build
-cd build
+mkdir -p "$LIB_DIR/build"
+cd "$LIB_DIR/build"
 cmake ..
 make
+cd -

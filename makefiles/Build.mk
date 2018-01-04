@@ -1,24 +1,22 @@
-
 THIRD_PARTY = third_party/
 
-GTEST_DIR  = $(THIRD_PARTY)gtest/googletest/build/
-GLOG_DIR   = $(THIRD_PARTY)glog/
-GFLAGS_DIR = $(THIRD_PARTY)gflags/build/
+GTEST_DIR   = $(THIRD_PARTY)gtest/googletest/
+GLOG_DIR    = $(THIRD_PARTY)glog/
+GFLAGS_DIR  = $(THIRD_PARTY)gflags/build/
+
+export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
+export LD_LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
 
 exec  := sat_runner
 
-sources := $(wildcard $(SRC)core/*.cc \
-		      $(SRC)util/*.cc)
-headers := $(wildcard $(SRC)core/*.h \
-		      $(SRC)util/*.h)
-
+sources := $(wildcard $(SRC)core/*.cc)
 objects         := $(patsubst %.cc, $(OBJ)%.o, $(sources))
 release_objects := $(patsubst %.cc, $(OBJ)release/%.o, $(sources))
 debug_objects   := $(patsubst %.cc, $(OBJ)debug/%.o, $(sources))
 
 tests := $(wildcard tests/units/*.test.cc)
-tests_objects += $(patsubst %.cc, $(OBJ)%.o, $(tests))
-tests_objects += $(patsubst %.cc, $(OBJ)tests/%.o, $(sources))
+tests_objects := $(patsubst %.cc, $(OBJ)%.o, $(tests))
+tests_objects += $(debug_objects)
 tests_objects := $(filter-out %$(exec).o, $(tests_objects))
 
 $(call REQUIRE-DIR, $(objects))
@@ -36,12 +34,15 @@ $(call REQUIRE-DIR, $(BIN)test)
 $(call REQUIRE-DEP, $(sources))
 $(call REQUIRE-DEP, $(tests))
 
+
 $(BIN)$(exec): $(objects)
 $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
-CFLAGS += -I$(SRC) -I$(GLOG_DIR)include -I$(GFLAGS_DIR)include
-LDFLAGS += -L$(GLOG_DIR)lib/ -L$(GFLAGS_DIR)lib -lglog -lgflags
+CFLAGS += -I$(SRC) -I$(GLOG_DIR)include/ -I$(GFLAGS_DIR)include
+LDFLAGS += -L$(GLOG_DIR)lib/ -L$(GFLAGS_DIR)lib/ -lglog -lgflags
+
+third_party: glog gtest gflags
 
 default: CFLAGS += -O3 -fPIC -Wall -Wextra
 default: $(BIN)$(exec)
@@ -52,31 +53,25 @@ release: $(BIN)$(exec)_release
 debug: CFLAGS += -O0 -fPIC -Wall -Wextra -g  -D DEBUG
 debug: $(BIN)$(exec)_debug
 
-third_party: gflags glog gtest
-glog:   $(GLOG_DIR)lib/libglog.a
+glog:   $(GLOG_DIR)libglog.a
 gtest:  $(GTEST_DIR)libgtest.a
-gflags: $(GFLAGS_DIR)libgflags.a
+gflags: $(GFLAGS_DIR)lib/libgflags.a
 
-.PHONY: glog gtest gflags
+.PHONY: glog gtest
 
 
 ################################################################################
 # TESTS
 
-CFLAGS_TEST = $(CFLAGS) -I third_party/gtest/googletest/include/
-LDFLAGS_TEST = $(LDFLAGS) -L $(GTEST_DIR) -lgtest -lgtest_main -lpthread -lgcov
-
-test: CFLAGS += -O0 --coverage -fprofile-arcs -ftest-coverage -fPIC
-test: gtest $(BIN)test
+test: CFLAGS += -isystem ${GTEST_DIR}/include -O0 --coverage -fPIC
+test: LDFLAGS += -lgtest -lgtest_main -lpthread -lgcov
+test: $(BIN)test
 run-test: test
-	./$(BIN)test
-run-test-valgrind: test FORCE
-	$(call cmd-valgrind, ./$(BIN)test)
-run-test-gdb: test FORCE
-	$(call cmd-gdb, ./$(BIN)test)
-run-test-coverage: run-test
-	$(call cmd-gcovr, $(OBJ)tests/$(SRC))
-FORCE:
+	$(call 	cmd-call, ./$(BIN)test)
+run-test-valgrind: test
+	$(call 	cmd-call, valgrind --leak-check=full ./$(BIN)test)
+run-test-gdb: test
+	$(call 	cmd-call, gdb --args ./$(BIN)test)
 
 ################################################################################
 
@@ -88,11 +83,11 @@ check-style: $(sources) $(headers)
 $(GTEST_DIR)libgtest.a:
 	$(call cmd-call, scripts/build_gtest.sh)
 
-$(GLOG_DIR)lib/libglog.a:
+$(GLOG_DIR)libglog.a:
 	$(call cmd-call, scripts/build_glog.sh)
 
-$(GFLAGS_DIR)libgflags.a:
-	$(call cmd-call, scripts/build_gflags)
+$(GFLAGS_DIR)lib/libgflags.a:
+	$(call cmd-call, scripts/build_gflags.sh)
 
 # Generic rules
 
@@ -105,15 +100,20 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 	$(call cmd-ld, $@, $^)
 
-$(BIN)test: $(tests_objects)
-	echo $(tests_objects)
-	$(call cmd-ld, $@, $^, $(LDFLAGS_TEST))
 
-$(OBJ)tests/%.o: %.cc
-	$(call cmd-cxx, $@, $<, $(CFLAGS_TEST))
+$(OBJ)%.o: %.cc
+	$(call cmd-cxx, $@, $<, $(CFLAGS))
 
 $(OBJ)release/%.o: %.cc
 	$(call cmd-cxx, $@, $<, $(CFLAGS))
 
 $(OBJ)debug/%.o: %.cc
 	$(call cmd-cxx, $@, $<, $(CFLAGS))
+
+##
+
+$(OBJ)%.test.o: %.test.cc
+	$(call cmd-cxx, $@, $<, $(CFLAGS))
+
+$(BIN)test: $(tests_objects)
+	$(call cmd-ld, $@, $^, $(LDFLAGS))
