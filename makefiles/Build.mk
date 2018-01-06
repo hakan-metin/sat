@@ -18,7 +18,7 @@ debug_objects   := $(patsubst %.cc, $(OBJ)debug/%.o, $(sources))
 tests := $(wildcard tests/units/*.test.cc)
 tests_objects := $(patsubst %.cc, $(OBJ)%.o, $(tests))
 tests_objects += $(debug_objects)
-tests_objects := $(filter-out %$(exec).o, $(tests_objects))
+tests_objects := $(filter-out %SatRunner.o, $(tests_objects))
 
 $(call REQUIRE-DIR, $(objects))
 $(call REQUIRE-DIR, $(BIN)$(exec))
