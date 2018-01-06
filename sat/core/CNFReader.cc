@@ -82,3 +82,10 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
 
 }  // namespace io
 }  // namespace sat
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

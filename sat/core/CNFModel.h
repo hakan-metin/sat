@@ -58,3 +58,10 @@ class CNFModel {
 }  // namespace sat
 
 #endif  // SAT_CORE_CNFMODEL_H_
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

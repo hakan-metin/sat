@@ -46,7 +46,7 @@ void CNFModel::addClause(std::vector<Literal>* literals) {
 }
 
 int64 CNFModel::numberOfVariables() const {
-    return _num_variables + 1; // Because start from 0
+    return _num_variables + 1;  // Because start from 0
 }
 int64 CNFModel::numberOfClauses() const {
     return _binary_clauses.size() + _ternary_clauses.size() +_clauses.size();
@@ -54,3 +54,10 @@ int64 CNFModel::numberOfClauses() const {
 
 }  // namespace core
 }  // namespace sat
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

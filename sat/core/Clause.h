@@ -57,3 +57,10 @@ class Clause {
 }  // namespace sat
 
 #endif  // SAT_CORE_CLAUSE_H_
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

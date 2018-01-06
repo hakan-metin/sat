@@ -63,3 +63,10 @@ class StreamBuffer {
 
 
 #endif  // SAT_CORE_STREAMBUFFER_H_
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

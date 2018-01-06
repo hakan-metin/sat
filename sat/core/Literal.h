@@ -92,3 +92,10 @@ class Literal {
 }  // namespace core
 }  // namespace sat
 #endif  // SAT_CORE_LITERAL_H_
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

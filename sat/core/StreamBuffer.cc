@@ -122,3 +122,10 @@ std::string StreamBuffer::errorMessage() const {
 
 }  // namespace io
 }  // namespace sat
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

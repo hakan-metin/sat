@@ -22,32 +22,32 @@
 namespace sat {
 namespace core {
 
-
 class Assignment {
  public:
-        Assignment() {}
-        explicit Assignment(unsigned int num_variables) {
-            resize(num_variables);
-        }
-        ~Assignment() {}
+    Assignment() {}
+    explicit Assignment(unsigned int num_variables) {
+        resize(num_variables);
+    }
+    ~Assignment() {}
 
-        void resize(unsigned int num_variables);
-        void assignFromTrueLiteral(Literal literal);
-        void unassignLiteral(Literal literal);
+    void resize(unsigned int num_variables);
+    void assignFromTrueLiteral(Literal literal);
+    void unassignLiteral(Literal literal);
 
-        bool literalIsTrue(Literal literal) const;
-        bool literalIsFalse(Literal literal) const;
-        bool literalIsAssigned(Literal literal) const;
-        bool variableIsAssigned(BooleanVariable variable) const;
+    bool literalIsTrue(Literal literal) const;
+    bool literalIsFalse(Literal literal) const;
+    bool literalIsAssigned(Literal literal) const;
+    bool variableIsAssigned(BooleanVariable variable) const;
 
-        Literal getTrueLiteralForAssignedVariable(BooleanVariable var) const;
-        Literal getFalseLiteralForAssignedVariable(BooleanVariable var) const;
+    Literal getTrueLiteralForAssignedVariable(BooleanVariable var) const;
+    Literal getFalseLiteralForAssignedVariable(BooleanVariable var) const;
 
-        unsigned int numberOfVariables() const;
+    unsigned int numberOfVariables() const;
+
  private:
-        sat::Bitset64<LiteralIndex> _assignment;
+    sat::Bitset64<LiteralIndex> _assignment;
 
-         DISALLOW_COPY_AND_ASSIGN(Assignment);
+    DISALLOW_COPY_AND_ASSIGN(Assignment);
 };
 
 inline void Assignment::resize(unsigned int num_variables) {
@@ -73,7 +73,7 @@ inline bool Assignment::literalIsFalse(Literal literal) const {
 }
 
 inline bool Assignment::literalIsAssigned(Literal literal) const {
-     return _assignment.AreOneOfTwoBitsSet(literal.index());
+    return _assignment.AreOneOfTwoBitsSet(literal.index());
 }
 
 inline bool Assignment::variableIsAssigned(BooleanVariable var) const {
@@ -103,3 +103,9 @@ inline unsigned int Assignment::numberOfVariables() const {
 }  // namespace sat
 
 #endif  // SAT_CORE_ASSIGNMENT_H_
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

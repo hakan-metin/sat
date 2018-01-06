@@ -36,3 +36,10 @@ Clause* Clause::create(const std::vector<Literal>& literals,
 
 }  // namespace core
 }  // namespace sat
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */

@@ -40,3 +40,10 @@ class CNFReader {
 }  // namespace sat
 
 #endif  // SAT_CORE_CNFREADER_H_
+
+/*
+ * Local Variables:
+ * mode: c++
+ * indent-tabs-mode: nil
+ * End:
+ */
