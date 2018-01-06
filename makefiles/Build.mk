@@ -10,6 +10,7 @@ export LD_LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
 exec  := sat_runner
 
 sources := $(wildcard $(SRC)core/*.cc)
+headers := $(wildcard $(SRC)core/*.h)
 objects         := $(patsubst %.cc, $(OBJ)%.o, $(sources))
 release_objects := $(patsubst %.cc, $(OBJ)release/%.o, $(sources))
 debug_objects   := $(patsubst %.cc, $(OBJ)debug/%.o, $(sources))
@@ -40,7 +41,7 @@ $(BIN)$(exec)_release: $(release_objects)
 $(BIN)$(exec)_debug: $(debug_objects)
 
 CFLAGS += -I$(SRC) -I$(GLOG_DIR)include/ -I$(GFLAGS_DIR)include
-LDFLAGS += -L$(GLOG_DIR)lib/ -L$(GFLAGS_DIR)lib/ -lglog -lgflags
+LDFLAGS += -L$(GLOG_DIR)lib/ -L$(GFLAGS_DIR)lib/ -lglog -lgflags_nothreads
 
 third_party: glog gtest gflags
 
@@ -77,7 +78,7 @@ run-test-gdb: test
 
 
 check-style: $(sources) $(headers)
-	python ./scripts/cpplint.py $^
+	$(call cmd-call, ./scripts/cpplint.py $^)
 
 # Special build
 $(GTEST_DIR)libgtest.a:
