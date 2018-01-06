@@ -24,12 +24,6 @@ static const int kBufferSize = 4096;
 namespace sat {
 namespace io {
 
-enum StreamBufferError {
-    SUCCESS,
-    CANNOT_OPEN_FILE,
-    ERROR_PARSE_INT
-};
-
 class StreamBuffer {
  public:
     explicit StreamBuffer(const std::string& filename);
@@ -43,17 +37,12 @@ class StreamBuffer {
     int operator*();
     void operator++();
 
-    bool isValid() const;
-    StreamBufferError error() const;
-    std::string errorMessage() const;
-
  private:
     const std::string _filename;
     gzFile _in;
     unsigned char _buffer[kBufferSize];
     unsigned int _index;
     unsigned int _size;
-    StreamBufferError _error;
 
     unsigned char read();
 };

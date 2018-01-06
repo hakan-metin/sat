@@ -25,11 +25,10 @@ StreamBuffer::StreamBuffer(const char* filename) :
         _filename(filename),
         _in(nullptr),
         _index(0),
-        _size(0),
-        _error(SUCCESS) {
+        _size(0) {
     _in = gzopen(filename, "rb");
     if (_in == nullptr)
-        _error = CANNOT_OPEN_FILE;
+        LOG(FATAL) << "Cannot open file " << filename;
 }
 
 StreamBuffer::~StreamBuffer() {
@@ -59,10 +58,8 @@ int StreamBuffer::readInt() {
         ++(*this);
     }
 
-    if (!std::isspace(c) && c != '\0') {
-        _error = ERROR_PARSE_INT;
-        return 0;
-    }
+    if (!std::isspace(c) && c != '\0')
+        LOG(FATAL) << "Cannot read literal " << value << c;
 
     return negative ? -value : value;
 }
@@ -100,24 +97,6 @@ unsigned char StreamBuffer::read() {
         _index = 0;
     }
     return (_index >= _size) ? '\0' : _buffer[_index];
-}
-
-
-bool StreamBuffer::isValid() const {
-    return _error == SUCCESS;
-}
-
-StreamBufferError StreamBuffer::error() const {
-    return _error;
-}
-
-std::string StreamBuffer::errorMessage() const {
-    switch (_error) {
-    case SUCCESS: return std::string("Success");
-    case CANNOT_OPEN_FILE: return std::string("Cannot open file " + _filename);
-    case ERROR_PARSE_INT: return std::string("value is not an integer");
-    }
-    return std::string("Unknown error");
 }
 
 }  // namespace io

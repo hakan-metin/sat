@@ -31,33 +31,23 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
 
     std::vector<sat::core::Literal> literals;
 
-    if (!in.isValid())
-        LOG(FATAL) << in.errorMessage() << std::endl;
-
     while (*in != '\0') {
         if (*in == 'c') {
             in.skipLine();
         } else if (*in == 'p') {
-            ++in; assert(*in == ' ');
-            ++in; assert(*in == 'c');
-            ++in; assert(*in == 'n');
-            ++in; assert(*in == 'f');
+            ++in; CHECK_EQ(*in, ' ');
+            ++in; CHECK_EQ(*in, 'c');
+            ++in; CHECK_EQ(*in, 'n');
+            ++in; CHECK_EQ(*in, 'f');
             ++in;
 
             expected_num_vars = in.readInt();
-            if (!in.isValid())
-                LOG(FATAL) << in.errorMessage() << std::endl;
-
             expected_num_clauses = in.readInt();
-            if (!in.isValid())
-                LOG(FATAL) << in.errorMessage() << std::endl;
             in.skipLine();
         } else {
             literals.clear();
             do {
                 read_int = in.readInt();
-                if (!in.isValid())
-                    LOG(FATAL) << in.errorMessage() << std::endl;
                 if (read_int != 0) {
                     sat::core::Literal lit(read_int);
                     literals.push_back(lit);
@@ -69,14 +59,16 @@ bool CNFReader::load(const std::string &filename, sat::core::CNFModel *model) {
         in.skipWhiteSpaces();
     }
 
-    if (model->numberOfVariables() != expected_num_vars)
-        LOG(FATAL) << "Expected " << expected_num_vars << " variables: found: "
-                   <<  model->numberOfVariables();
-
-    if (model->numberOfClauses() != expected_num_clauses)
-        LOG(FATAL) << "Expected " << expected_num_clauses << " clauses: found: "
-                   <<  model->numberOfClauses();
-
+    if (model->numberOfVariables() != expected_num_vars) {
+        LOG(ERROR) << "Expected " << expected_num_vars <<
+            " variables: found " <<  model->numberOfVariables();
+        return false;
+    }
+    if (model->numberOfClauses() != expected_num_clauses) {
+        LOG(ERROR) << "Expected " << expected_num_clauses <<
+            " clauses: found " <<  model->numberOfClauses();
+        return false;
+    }
     return true;
 }
 
