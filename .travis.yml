@@ -10,3 +10,4 @@ matrix:
 script:
   - make third_party
   - make run-test
+  - make check-style
