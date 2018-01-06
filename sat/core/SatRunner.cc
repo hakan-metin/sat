@@ -11,18 +11,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <gflags/gflags.h>
+
 #include <iostream>
 
 #include "core/CNFReader.h"
 #include "core/CNFModel.h"
+#include "util/logging.h"
 
-int main() {
+DEFINE_string(input, "", "Required: input cnf file.");
+
+DEFINE_bool(print_model, false,
+            "If true and the problem is satisfiable"
+            " print solution to stdout in cnf form.");
+
+
+static const char kUsage[] =
+    "Usage: see flags.\n"
+    "This program solves a given CNF sat problem in cnf format.";
+
+int main(int argc, char *argv[]) {
+    ::google::InitGoogleLogging(argv[0]);
+    gflags::SetUsageMessage(kUsage);
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
     std::cout << "Hello" << std::endl;
-    std::string cnf_filename("/data/hmetin/cnfs/hole/hole005.cnf");
     sat::core::CNFModel model;
     sat::io::CNFReader reader;
 
-    reader.load(cnf_filename, &model);
+    reader.load(FLAGS_input, &model);
 
 
     return 0;

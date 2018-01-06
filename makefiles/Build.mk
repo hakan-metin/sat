@@ -7,7 +7,7 @@ GFLAGS_DIR  = $(THIRD_PARTY)gflags/build/
 export LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
 export LD_LIBRARY_PATH=${GTEST_DIR}:${GLOG_DIR}lib
 
-exec  := sat_runner
+exec  := sat
 
 sources := $(wildcard $(SRC)core/*.cc)
 headers := $(wildcard $(SRC)core/*.h)
