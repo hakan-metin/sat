@@ -18,6 +18,7 @@
 #include "core/CNFReader.h"
 #include "core/CNFModel.h"
 #include "util/logging.h"
+#include "core/Graph.h"
 
 DEFINE_string(input, "", "Required: input cnf file.");
 
